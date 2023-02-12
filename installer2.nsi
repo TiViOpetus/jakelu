@@ -35,6 +35,10 @@
   # Check if user really wants to abort
   !define MUI_ABORTWARNING
 
+  # Add a bitmap (150 x 57 px) for a logo
+  !define MUI_HEADERIMAGE_BITMAP "jerksoft.bmp"
+  !define MUI_ABORTWARNING
+
   # Show all languages, despite user's codepage
   !define MUI_LANGDLL_ALLLANGUAGES
 
