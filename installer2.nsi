@@ -37,7 +37,7 @@
 
   # Add a bitmap (150 x 57 px) for a logo into the header of the installer page
   !define MUI_HEADERIMAGE
-  !define MUI_HEADERIMAGE_BITMAP "jerksoft.bmp"
+  !define MUI_HEADERIMAGE_BITMAP "Jerksoft3.bmp"
 
   # Show all languages, despite user's codepage
   !define MUI_LANGDLL_ALLLANGUAGES
