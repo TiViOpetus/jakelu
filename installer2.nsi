@@ -9,7 +9,7 @@
 
 # General
 
-  # Name and installer file name
+  # The name of the application, installer file name and character encoding
   Name "Hunspell Dictionary Maintainer "
   OutFile "HSDMInstaller.exe"
   Unicode True
@@ -17,7 +17,7 @@
   # Default installation folder: user's application data directory
   InstallDir "$LOCALAPPDATA\Hunspell Dictionary Maintainer"
   
-  # Get installation folder from registry if available (reinstall)
+  # Get installation information from registry if available (reinstall)
   InstallDirRegKey HKCU "Software\Hunspell Dictionary Maintainer" ""
 
   # Request application privileges for Windows Vista or later
@@ -32,14 +32,15 @@
 # --- Variable definitions end
 
 # Interface Settings
-  # Check if user really wants to abort
+
+  # A Message box to show when user cancels the installation dialog
   !define MUI_ABORTWARNING
 
-  # Add a bitmap (150 x 57 px) for a logo into the header of the installer page
+  # Add a bitmap (150 x 57 px) for a logo into the header of the installer page, must be a bmp file
   !define MUI_HEADERIMAGE
   !define MUI_HEADERIMAGE_BITMAP "Jerksoft3.bmp"
 
-  # Show all languages, despite user's codepage
+  # Show all languages defined, despite user's language settings
   !define MUI_LANGDLL_ALLLANGUAGES
 
 # --- end Interface settings
@@ -78,21 +79,21 @@
 
 # --- Pages end
 
-# Languages, 1st is the default
+# Languages, 1st is the default, add more if needed
  
   !insertmacro MUI_LANGUAGE "Finnish"
   !insertmacro MUI_LANGUAGE "English"
 
 # --- Languages end
 
-# Installer Sections
+# Installer Sections (Choises what to install -> chceck boxes in the installer)
 
-# Section for choosing the program (Dictionary Maintainer) to be installed
+# Section for choosing the program (Dictionary Maintainer) to be installed -> named section SecProgram
 Section "Dictionary Maintainer" SecProgram
 
   SetOutPath "$INSTDIR"
   
-  # Files to put into the installation directory: all files from the distribution folder
+  # Files to put into the installation directory: all files and folders from the distribution folder where pyinstaller stores the app
   File /r "dist\maintainGui\"
 
   # Store installation folder to registry
@@ -101,9 +102,10 @@ Section "Dictionary Maintainer" SecProgram
   # Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
   
+  # Add items to the Start Menu
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     
-    # Create shortcuts for the Start Menu: Folder, program to start and the uninstaller
+    # Create shortcuts for the Start Menu: A folder name, the program to start and the uninstaller
     CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
     CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Maintain Dictionary.lnk" "$INSTDIR\maintainGui.exe"
     CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
@@ -137,13 +139,13 @@ FunctionEnd
 
 # Descriptions
 
-  # Language strings to be shown in the description area
+  # Strings to be shown in the description area in differen installation languages
   LangString DESC_SecProgram ${LANG_FINNISH} "Varsinainen ohjelma"
   LangString DESC_SecProgram ${LANG_ENGLISH} "The porgram file"
   LangString DESC_SecDictionaries ${LANG_FINNISH} "Hunspell-sanakirjat. Kopioi tiedostot taitto-ohjelman sanakirjakansioon"
   LangString DESC_SecDictionaries ${LANG_ENGLISH} "Original dictionaries. Copy files after installation to DTP application's dictionaries folder"
 
-  # Assign language strings to sections
+  # Assign those strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecProgram} $(DESC_SecProgram)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecDictionaries} $(DESC_SecDictionaries)
@@ -154,7 +156,7 @@ FunctionEnd
 # Uninstaller Section
 Section "Uninstall"
 
-  # Remove files and folders from installation directory, if not successfull remove after reboot
+  # Remove all files and folders from installation directory, if not successfull remove after reboot
   RMDir /r /REBOOTOK $INSTDIR
   
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
@@ -165,7 +167,6 @@ Section "Uninstall"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
   
   # Clean the registry by removing all keys under Hunspell Dictionary Maintainer
-  
   DeleteRegKey HKCU "Software\Hunspell Dictionary Maintainer"
 
 SectionEnd
