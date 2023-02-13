@@ -53,24 +53,26 @@
 
 # --- Language Selection Dialog Settings end
 
-# Pages
+# Pages to show in the installer
   !insertmacro MUI_PAGE_WELCOME
 
-  # License file containing the GNU GPL 3 information
+  # License file containing the GNU GPL 3 information, the name of the file is LICENSE (created by Github)
   !insertmacro MUI_PAGE_LICENSE "LICENSE"
-
+  
+  # Pages for choosing components and the installation directory
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   
-  # Start Menu Folder Page Configuration
+  # Registry keys and values for the current user
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU" 
   !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Hunspell Dictionary Maintainer" 
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
   
+  # Start Menu definitons: folder and program starters
   !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
-  
   !insertmacro MUI_PAGE_INSTFILES
-  
+
+  # Start Menu unistaller definitons
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
 
@@ -85,12 +87,12 @@
 
 # Installer Sections
 
-# Section for choosing the program 
+# Section for choosing the program (Dictionary Maintainer) to be installed
 Section "Dictionary Maintainer" SecProgram
 
   SetOutPath "$INSTDIR"
   
-  # Files to put into the installation directory from the distribution folder
+  # Files to put into the installation directory: all files from the distribution folder
   File /r "dist\maintainGui\"
 
   # Store installation folder to registry
@@ -101,7 +103,7 @@ Section "Dictionary Maintainer" SecProgram
   
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     
-    # Create shortcuts
+    # Create shortcuts for the Start Menu: Folder, program to start and the uninstaller
     CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
     CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Maintain Dictionary.lnk" "$INSTDIR\maintainGui.exe"
     CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
@@ -110,11 +112,11 @@ Section "Dictionary Maintainer" SecProgram
 
 SectionEnd
 
-# Section for optional dictionaries
+# Section for optional dictionaries to be installed
 Section "Dictionaries" SecDictionaries
     SetOutPath "$INSTDIR\Dictionaries"
   
-  # Dictionary files to put into subdirectory Dictionaries
+  # Dictionary files to put into subdirectory Dictionaries from the projects root folder
   File "*.dic"
   File "*.aff"
 SectionEnd
@@ -135,7 +137,7 @@ FunctionEnd
 
 # Descriptions
 
-  # Language strings
+  # Language strings to be shown in the description area
   LangString DESC_SecProgram ${LANG_FINNISH} "Varsinainen ohjelma"
   LangString DESC_SecProgram ${LANG_ENGLISH} "The porgram file"
   LangString DESC_SecDictionaries ${LANG_FINNISH} "Hunspell-sanakirjat. Kopioi tiedostot taitto-ohjelman sanakirjakansioon"
